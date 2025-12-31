@@ -200,4 +200,30 @@
                 container.classList.add('dragging');
 
                 const moveHandler = (moveE) => {
-                    const diff = isLeft ? (moveE.clientX - startX) : (startX
+                    const diff = isLeft ? (moveE.clientX - startX) : (startX - moveE.clientX);
+                    panel.style.width = (startWidth + diff) + 'px';
+                };
+
+                const upHandler = () => {
+                    container.classList.remove('dragging');
+                    document.removeEventListener('mousemove', moveHandler);
+                    document.removeEventListener('mouseup', upHandler);
+                };
+
+                document.addEventListener('mousemove', moveHandler);
+                document.addEventListener('mouseup', upHandler);
+            });
+        };
+
+        attachResizer(r1, leftPanel, true);
+        attachResizer(r2, rightPanel, false);
+    }
+
+    window.onload = () => {
+        initMenu();
+        setupResizers();
+        changeVideo(channelData[0].id); // 預設載入台北
+    };
+</script>
+</body>
+</html>
