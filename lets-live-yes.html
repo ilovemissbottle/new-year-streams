@@ -8,7 +8,7 @@
             --neon-pink: #ff00ff;
             --neon-blue: #00f2ff;
             --bg-dark: #050505;
-            --resizer-width: 5px;
+            --resizer-width: 4px;
         }
         body, html {
             margin: 0; padding: 0; height: 100%;
@@ -18,6 +18,7 @@
             overflow: hidden;
         }
 
+        /* 移除所有掃描線效果，保持背景乾淨 */
         .container {
             display: flex;
             height: 100vh;
@@ -25,91 +26,103 @@
             overflow: hidden;
         }
 
-        /* 左側選單：初始 15% */
+        /* 左側選單 */
         .sidebar {
             width: 15%;
             min-width: 150px;
             border-right: 1px solid var(--neon-blue);
-            padding: 15px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
-            background: rgba(10, 10, 15, 0.95);
+            background: #0a0a0f;
             box-sizing: border-box;
             overflow-y: auto;
         }
 
-        /* 中間影片：初始 70% */
+        /* 中間影片 */
         .main-stage {
-            flex: 1; /* 自動填滿剩餘空間 */
+            flex: 1;
             background: #000;
-            display: flex;
-            flex-direction: column;
             overflow: hidden;
         }
 
-        /* 右側聊天室：初始 15% */
+        /* 右側聊天室 */
         .chat-panel {
             width: 15%;
             min-width: 200px;
             border-left: 1px solid var(--neon-blue);
-            background: rgba(10, 10, 15, 0.95);
+            background: #0a0a0f;
             box-sizing: border-box;
         }
 
-        /* 拖曳條 Resizer */
+        /* 拖曳條 */
         .resizer {
             width: var(--resizer-width);
             cursor: col-resize;
-            background: transparent;
-            transition: background 0.3s;
+            background: rgba(0, 242, 255, 0.1);
+            transition: background 0.2s;
             z-index: 10;
         }
-        .resizer:hover {
-            background: var(--neon-pink);
-            box-shadow: 0 0 10px var(--neon-pink);
-        }
+        .resizer:hover { background: var(--neon-pink); }
 
-        iframe { width: 100%; height: 100%; border: none; pointer-events: auto; }
+        iframe { width: 100%; height: 100%; border: none; }
         
-        /* 拖曳時防止 iframe 攔截滑鼠事件 */
+        /* 拖曳保護層 */
         .dragging iframe { pointer-events: none; }
 
-        .nav-item { display: flex; gap: 5px; margin-bottom: 8px; }
+        /* 按鈕樣式優化 */
+        .nav-item { display: flex; gap: 4px; margin-bottom: 6px; }
         .nav-btn {
             flex: 1; background: transparent; border: 1px solid var(--neon-blue);
-            color: var(--neon-blue); padding: 8px; cursor: pointer; text-align: left;
-            font-size: 0.9rem;
+            color: var(--neon-blue); padding: 6px 10px; cursor: pointer;
+            text-align: left; font-size: 0.85rem; overflow: hidden; white-space: nowrap;
         }
-        .nav-btn:hover { background: rgba(0, 242, 255, 0.2); }
+        .nav-btn:hover { background: rgba(0, 242, 255, 0.15); }
+        
         .add-btn {
             background: transparent; border: 1px solid var(--neon-pink);
-            color: var(--neon-pink); padding: 8px; cursor: pointer;
+            color: var(--neon-pink); padding: 6px 12px; cursor: pointer;
         }
-        .grid-mode { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; height: 100%; gap: 5px; background: #111; }
-        .status-bar { font-size: 0.7rem; margin-bottom: 10px; color: var(--neon-pink); }
+
+        /* 縮小高度的四格按鈕 */
+        .multi-btn {
+            background: rgba(255, 0, 255, 0.1);
+            border: 1px solid var(--neon-pink);
+            color: var(--neon-pink);
+            padding: 4px; /* 縮小高度 */
+            margin-bottom: 12px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .multi-btn:hover { background: var(--neon-pink); color: #000; }
+
+        .grid-mode { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; height: 100%; gap: 4px; background: #000; }
+        .status-bar { font-size: 0.7rem; margin-bottom: 8px; color: #666; }
     </style>
 </head>
-<body id="body">
+<body>
 
 <div class="container" id="main-container">
     <div class="sidebar" id="left-panel">
-        <h3 style="text-shadow: 0 0 5px var(--neon-blue); margin: 0 0 10px 0;">NYE_CORE</h3>
-        <div class="status-bar" id="status-msg">已就緒</div>
-        <button class="nav-btn" onclick="renderMulti()" style="border-color:var(--neon-pink); margin-bottom:15px; text-align:center;">[ 啟動四格模式 ]</button>
+        <div style="font-weight: bold; margin-bottom: 5px; color: var(--neon-blue);">NYE_SYSTEM</div>
+        <div class="status-bar" id="status-msg">READY</div>
+        
+        <button class="multi-btn" onclick="renderMulti()">[ 啟動四格模式 ]</button>
+        
         <div id="channel-list"></div>
     </div>
 
     <div class="resizer" id="resizer-1"></div>
 
     <div class="main-stage" id="video-container">
-        <iframe id="main-player" src="https://www.youtube.com/embed/1jnde6OlFwk?autoplay=1&mute=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-    </div>
+        </div>
 
     <div class="resizer" id="resizer-2"></div>
 
     <div class="chat-panel" id="right-panel">
-        <iframe id="chat-iframe" src=""></iframe>
-    </div>
+        </div>
 </div>
 
 <script>
@@ -124,9 +137,12 @@
     ];
 
     let selectedQueue = [];
-    const getDomain = () => window.location.hostname || "localhost";
 
-    // 1. 初始化選單
+    // 取得當前網址，用於 YouTube 留言板嵌入權限
+    function getDomain() {
+        return window.location.hostname || "localhost";
+    }
+
     function initMenu() {
         const list = document.getElementById('channel-list');
         channelData.forEach(ch => {
@@ -139,264 +155,49 @@
     }
 
     function changeVideo(id) {
-        document.getElementById('video-container').innerHTML = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1&mute=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-        document.getElementById('right-panel').innerHTML = `<iframe src="https://www.youtube.com/live_chat?v=${id}&embed_domain=${getDomain()}"></iframe>`;
-        document.getElementById('status-msg').innerText = "LIVE: " + id;
+        // 主畫面切換 (靜音自動播放以符合瀏覽器政策)
+        document.getElementById('video-container').innerHTML = 
+            `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1&mute=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+        
+        // 留言板切換 - 加入更多參數確保載入
+        const domain = getDomain();
+        document.getElementById('right-panel').innerHTML = 
+            `<iframe src="https://www.youtube.com/live_chat?v=${id}&embed_domain=${domain}" id="chat-iframe"></iframe>`;
+        
+        document.getElementById('status-msg').innerText = "TRACKING: " + id;
     }
 
     function addToQueue(id) {
         if (selectedQueue.includes(id)) return;
         if (selectedQueue.length >= 4) selectedQueue.shift();
         selectedQueue.push(id);
-        document.getElementById('status-msg').innerText = `已選: ${selectedQueue.length}/4`;
+        document.getElementById('status-msg').innerText = `QUEUE: ${selectedQueue.length}/4`;
     }
 
     function renderMulti() {
-        if (selectedQueue.length === 0) { alert("請先點擊 [+] 選取頻道"); return; }
+        if (selectedQueue.length === 0) { alert("請先點擊頻道旁邊的 [+]"); return; }
         let html = '<div class="grid-mode">';
         selectedQueue.forEach(id => {
             html += `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1&mute=1" allow="autoplay" allowfullscreen></iframe>`;
         });
         html += '</div>';
         document.getElementById('video-container').innerHTML = html;
+        document.getElementById('status-msg').innerText = "MULTI_VIEW";
     }
 
-    // 2. 拖曳調整寬度邏輯
-    const leftPanel = document.getElementById('left-panel');
-    const rightPanel = document.getElementById('right-panel');
-    const resizer1 = document.getElementById('resizer-1');
-    const resizer2 = document.getElementById('resizer-2');
-    const container = document.getElementById('main-container');
+    // 拖曳縮放邏輯
+    function setupResizers() {
+        const container = document.getElementById('main-container');
+        const leftPanel = document.getElementById('left-panel');
+        const rightPanel = document.getElementById('right-panel');
+        const r1 = document.getElementById('resizer-1');
+        const r2 = document.getElementById('resizer-2');
 
-    function initResizer(resizer, panel, isLeft) {
-        let startX, startWidth;
+        const attachResizer = (resizer, panel, isLeft) => {
+            resizer.addEventListener('mousedown', (e) => {
+                const startX = e.clientX;
+                const startWidth = panel.offsetWidth;
+                container.classList.add('dragging');
 
-        resizer.addEventListener('mousedown', (e) => {
-            startX = e.clientX;
-            startWidth = panel.offsetWidth;
-            container.classList.add('dragging'); // 拖曳時禁用 iframe 點擊
-
-            const onMouseMove = (e) => {
-                const delta = isLeft ? (e.clientX - startX) : (startX - e.clientX);
-                panel.style.width = `${startWidth + delta}px`;
-            };
-
-            const onMouseUp = () => {
-                container.classList.remove('dragging');
-                document.removeEventListener('mousemove', onMouseMove);
-                document.removeEventListener('mouseup', onMouseUp);
-            };
-
-            document.addEventListener('mousemove', onMouseMove);
-            document.addEventListener('mouseup', onMouseUp);
-        });
-    }
-
-    window.onload = () => {
-        initMenu();
-        changeVideo(channelData[0].id);
-        initResizer(resizer1, leftPanel, true);
-        initResizer(resizer2, rightPanel, false);
-    };
-</script>
-</body>
-</html><!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2026 CYBER NYE COMMAND CENTER</title>
-    <style>
-        :root {
-            --neon-pink: #ff00ff;
-            --neon-blue: #00f2ff;
-            --bg-dark: #050505;
-            --panel-bg: rgba(20, 20, 25, 0.8);
-        }
-
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            background-color: var(--bg-dark);
-            color: var(--neon-blue);
-            font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
-            overflow: hidden;
-        }
-
-        /* Cyberpunk 背景效果 */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            background-size: 100% 4px, 3px 100%;
-            pointer-events: none;
-            z-index: 100;
-        }
-
-        .container {
-            display: flex;
-            height: 100vh;
-            gap: 10px;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-
-        /* 左側選單 */
-        .sidebar {
-            width: 250px;
-            background: var(--panel-bg);
-            border: 1px solid var(--neon-pink);
-            box-shadow: 0 0 10px var(--neon-pink);
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        h2 {
-            font-size: 1.2rem;
-            text-transform: uppercase;
-            text-shadow: 0 0 5px var(--neon-blue);
-            border-bottom: 2px solid var(--neon-blue);
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-
-        .nav-btn {
-            background: transparent;
-            border: 1px solid var(--neon-blue);
-            color: var(--neon-blue);
-            padding: 12px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            text-align: left;
-            transition: all 0.3s;
-            clip-path: polygon(0 0, 90% 0, 100% 30%, 100% 100%, 10% 100%, 0 70%);
-        }
-
-        .nav-btn:hover {
-            background: var(--neon-blue);
-            color: black;
-            box-shadow: 0 0 15px var(--neon-blue);
-        }
-
-        .nav-btn.active {
-            border-color: var(--neon-pink);
-            color: var(--neon-pink);
-            box-shadow: 0 0 10px var(--neon-pink);
-        }
-
-        /* 中間播放器區域 */
-        .main-stage {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        #video-container {
-            width: 100%;
-            height: 100%;
-            background: #000;
-            border: 1px solid var(--neon-blue);
-            position: relative;
-        }
-
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        /* 右側聊天室 */
-        .chat-panel {
-            width: 350px;
-            background: var(--panel-bg);
-            border: 1px solid var(--neon-blue);
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* 多窗格模式 */
-        .grid-mode {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: repeat(2, 1fr);
-            gap: 5px;
-            width: 100%;
-            height: 100%;
-        }
-
-        .grid-mode iframe {
-            width: 100%;
-            height: 100%;
-        }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <div class="sidebar">
-        <h2>System_Access</h2>
-        <button class="nav-btn" onclick="showMulti()">[ MULTI_VIEW ] 同時觀看</button>
-        <div style="margin-top: 20px;">頻道切換：</div>
-        <button class="nav-btn" onclick="changeVideo('1jnde6OlFwk', '台北')">臺北最High新年城</button>
-        <button class="nav-btn" onclick="changeVideo('CODQ8WHywmo', '台中')">台中最強跨年夜</button>
-        <button class="nav-btn" onclick="changeVideo('6nV37uSsx1o', '高雄')">2026 雄嗨趴</button>
-        <button class="nav-btn" onclick="changeVideo('VnZ6x6m5VAc', '台東')">東！帶我走</button>
-        <button class="nav-btn" onclick="changeVideo('LvebymzFc2I', '台南')">台南好young</button>
-        <button class="nav-btn" onclick="changeVideo('fO69UoXVgUU', '新竹')">大新竹跨年晚會</button>
-        <button class="nav-btn" onclick="changeVideo('AF3wC8L8NyA', '雲林')">雲林跨年晚會</button>
-    </div>
-
-    <div class="main-stage">
-        <div id="video-container">
-            <iframe id="main-player" src="https://www.youtube.com/embed/1jnde6OlFwk?autoplay=1" allowfullscreen></iframe>
-        </div>
-    </div>
-
-    <div class="chat-panel" id="chat-container">
-        <iframe id="chat-iframe" src="https://www.youtube.com/live_chat?v=1jnde6OlFwk&embed_domain=localhost"></iframe>
-    </div>
-</div>
-
-<script>
-    const videos = [
-        '1jnde6OlFwk', 'CODQ8WHywmo', '6nV37uSsx1o', 
-        'VnZ6x6m5VAc', 'LvebymzFc2I', 'fO69UoXVgUU', 'AF3wC8L8NyA'
-    ];
-
-    function changeVideo(id, name) {
-        const container = document.getElementById('video-container');
-        // 切換主畫面
-        container.innerHTML = `<iframe id="main-player" src="https://www.youtube.com/embed/${id}?autoplay=1" allowfullscreen></iframe>`;
-        
-        // 切換聊天室
-        const chatContainer = document.getElementById('chat-container');
-        // 注意：YouTube 聊天室嵌入需要對應當前網址的 domain，如果是本地開啟，請將 embed_domain 設為空或對應 domain
-        chatContainer.innerHTML = `<iframe src="https://www.youtube.com/live_chat?v=${id}&embed_domain=${window.location.hostname}"></iframe>`;
-    }
-
-    function showMulti() {
-        const container = document.getElementById('video-container');
-        let html = '<div class="grid-mode">';
-        // 顯示前四個頻道作為多窗格範例
-        for(let i=0; i<4; i++) {
-            html += `<iframe src="https://www.youtube.com/embed/${videos[i]}?mute=1" allowfullscreen></iframe>`;
-        }
-        html += '</div>';
-        container.innerHTML = html;
-        
-        // 多窗格時聊天室預設改為台北
-        document.getElementById('chat-container').innerHTML = `<iframe src="https://www.youtube.com/live_chat?v=${videos[0]}&embed_domain=${window.location.hostname}"></iframe>`;
-    }
-
-    // 處理 YouTube 聊天室 embed 可能需要的 domain 問題
-    // 如果您是在本地直接開啟檔案，hostname 會是空的。
-</script>
-
-</body>
-</html>
+                const moveHandler = (moveE) => {
+                    const diff = isLeft ? (moveE.clientX - startX) : (startX
